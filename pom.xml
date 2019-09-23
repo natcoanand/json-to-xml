@@ -32,7 +32,7 @@
             <muleVersion>${app.runtime}</muleVersion>
             <username>${username}</username>
             <password>${password}</password>
-            <applicationName>json-to-xml</applicationName>
+            <applicationName>json-to-xml-v1</applicationName>
             <environment>Sandbox</environment>
         </cloudHubDeployment>
     </configuration> 
