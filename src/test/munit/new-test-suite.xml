@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+	<munit:config name="new-test-suite.xml" />
+	<api-gateway:autodiscovery apiId="15816567" doc:name="API Autodiscovery" doc:id="5b12cde4-b222-40c7-a099-76e42160155d" flowRef="json-to-xmlFlow" />
+	<munit:test name="new-test-suite-json-to-xmlFlowTest" doc:id="fdbb24eb-60d4-4506-9f60-3a013cef7598" description="Test">
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to json-to-xmlFlow" doc:id="5b8a644e-eae7-48b7-a005-805a355a4246" name="json-to-xmlFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="d41c95d9-2af7-4384-acbf-f760dbdebaab" actual="#[payload]" expected="#['XML']"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>
