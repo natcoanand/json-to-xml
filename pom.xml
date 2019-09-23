@@ -12,7 +12,8 @@
     <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
+		<username>anandmunich1</username>
+		<password>Mani123!!</password>
 		<app.runtime>4.1.4</app.runtime>
 		<mule.maven.plugin.version>3.2.7</mule.maven.plugin.version>
 	<munit.version>2.2.1</munit.version>
@@ -25,9 +26,25 @@
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
-				<configuration>
-				<classifier>mule-application</classifier>
-                </configuration>
+			    <configuration>
+         <cloudHubDeployment>
+            <uri>https://anypoint.mulesoft.com</uri>
+            <muleVersion>${app.runtime}</muleVersion>
+            <username>${username}</username>
+            <password>${password}</password>
+            <applicationName>test-project-for-cicd</applicationName>
+            <environment>Sandbox</environment>
+        </cloudHubDeployment>
+    </configuration> 
+				  <executions>
+        				<execution>
+            				<id>deploy</id>
+            				<phase>deploy</phase>
+            				<goals>
+                				<goal>deploy</goal>
+            				</goals>
+        				</execution>
+   			 	</executions>
 			</plugin>
 		<plugin>
                 <groupId>com.mulesoft.munit.tools</groupId>
@@ -103,16 +120,13 @@
             <layout>default</layout>
         </repository>
     </repositories>
+
+    
     <pluginRepositories>
-        <pluginRepository>
-            <id>mulesoft-releases</id>
-            <name>mulesoft release repository</name>
-            <layout>default</layout>
-            <url>https://repository.mulesoft.org/releases/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+    <pluginRepository>
+        <id>mule-public</id>
+        <url>https://repository.mulesoft.org/nexus/content/repositories/releases</url>
+    </pluginRepository>
+</pluginRepositories>
 
 </project>
