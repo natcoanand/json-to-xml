@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="70caa5a6-9c79-489c-9d94-b3a195a574e2" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="json-to-xmlFlow" doc:id="0816ec38-a8ed-404f-b418-baa1a2f43bbd" >
+		<http:listener doc:name="Listener" doc:id="5dc69620-05ae-4aff-bdb7-5f013c3ed160" config-ref="HTTP_Listener_config" path="/js"/>
+		<set-payload value="#['XML']" doc:name="Set Payload" doc:id="4973d4d1-feb1-46af-b6b1-dbb3d2e6dc79" />
+	</flow>
+</mule>
