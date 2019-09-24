@@ -9,7 +9,7 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
 http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
 http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="70caa5a6-9c79-489c-9d94-b3a195a574e2" >
-		<http:listener-connection host="0.0.0.0" port="8081" />
+		<http:listener-connection host="0.0.0.0" port="${http.port}" />
 	</http:listener-config>
 	<api-gateway:autodiscovery apiId="15816875" doc:name="API Autodiscovery" doc:id="dbc1dc21-1573-4371-bf08-59ed2285a23b" flowRef="json-to-xmlFlow" />
 	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="c07531bd-8c1c-4729-bb9e-53cac1a5107f" >
@@ -18,6 +18,7 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 	<file:config name="File_Config" doc:name="File Config" doc:id="0c8127a6-7e90-4d37-899a-d54c45500e70" >
 		<file:connection workingDir="/Users/anand.s.uday.shankar/Documents/Git-Hub-projects/json-to-xml/src/main/resources" />
 	</file:config>
+	<configuration-properties doc:name="Configuration properties" doc:id="8ffd7fec-3258-4d21-8acb-3ea49289af0e" file="config.yaml" />
 	<flow name="json-to-xmlFlow" doc:id="0816ec38-a8ed-404f-b418-baa1a2f43bbd" >
 		<http:listener doc:name="Listener" doc:id="5dc69620-05ae-4aff-bdb7-5f013c3ed160" config-ref="HTTP_Listener_config" path="/js"/>
 		<set-payload value="#['XML']" doc:name="Set Payload" doc:id="4973d4d1-feb1-46af-b6b1-dbb3d2e6dc79" />
