@@ -1,17 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="70caa5a6-9c79-489c-9d94-b3a195a574e2" >
 		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>
-	<api-gateway:autodiscovery apiId="15816567" doc:name="API Autodiscovery" doc:id="dbc1dc21-1573-4371-bf08-59ed2285a23b" flowRef="json-to-xmlFlow" />
+	<api-gateway:autodiscovery apiId="15816875" doc:name="API Autodiscovery" doc:id="dbc1dc21-1573-4371-bf08-59ed2285a23b" flowRef="json-to-xmlFlow" />
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="c07531bd-8c1c-4729-bb9e-53cac1a5107f" >
+		<salesforce:cached-basic-connection username="anand.s@accenture.com" password="Mani123!!" securityToken="WwVypONLZFoiJvvSpTY8qKEfv"/>
+	</salesforce:sfdc-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="0c8127a6-7e90-4d37-899a-d54c45500e70" >
+		<file:connection workingDir="/Users/anand.s.uday.shankar/Documents/Git-Hub-projects/json-to-xml/src/main/resources" />
+	</file:config>
 	<flow name="json-to-xmlFlow" doc:id="0816ec38-a8ed-404f-b418-baa1a2f43bbd" >
 		<http:listener doc:name="Listener" doc:id="5dc69620-05ae-4aff-bdb7-5f013c3ed160" config-ref="HTTP_Listener_config" path="/js"/>
 		<set-payload value="#['XML']" doc:name="Set Payload" doc:id="4973d4d1-feb1-46af-b6b1-dbb3d2e6dc79" />
+	</flow>
+	<flow name="json-to-xmlFlow1" doc:id="23ce4307-c0fd-4019-8422-671824d4c879" >
+		<http:listener doc:name="Listener" doc:id="1442db7c-b66c-45e2-a394-c2f867acc0cc" config-ref="HTTP_Listener_config" path="/sales"/>
+		<salesforce:query doc:name="Query" doc:id="15023773-12e9-4aef-a1a4-6b4163e2b3cc" config-ref="Salesforce_Config">
+			<salesforce:salesforce-query >SELECT Id,FirstName,LastName,Phone,Email from CONTACT</salesforce:salesforce-query>
+		</salesforce:query>
+		<ee:transform doc:name="Transform Message" doc:id="30baeaa9-7cb5-41f9-b8fd-5f3f1d166ba2" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="json-to-xmlFlow2" doc:id="0d341b91-dfde-4141-85fb-dd48d130c373" >
+		<http:listener doc:name="Listener" doc:id="b4c77a4a-170c-4347-8d36-159ec2449925" config-ref="HTTP_Listener_config" path="/create"/>
+		<file:read doc:name="Read" doc:id="ebc30c14-3e61-4252-bb92-fdac361053a5" config-ref="File_Config" path="/Users/anand.s.uday.shankar/Documents/Git-Hub-projects/json-to-xml/src/main/resources/MOCK_DATA.csv"/>
+		<ee:transform doc:name="Transform Message" doc:id="2eb1f9ef-71f0-425c-9b42-2807a73a4413">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create-bulk type="Contact" doc:name="Create bulk" doc:id="1bba755b-baac-4873-8a77-71b51308a207" config-ref="Salesforce_Config"/>
 	</flow>
 </mule>
